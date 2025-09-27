@@ -4,7 +4,9 @@
       "Bash(mkdir:*)",
       "Bash(npm install dotenv cors mongoose nodemon)",
       "Bash(npm install:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(curl -X POST http://localhost:5000/api/upload -F \"image=@package.json\" -H \"Content-Type: multipart/form-data\")",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []

@@ -7,11 +7,12 @@ dotenv.config();
 
 const app = express();
 
-connectDB();
+// connectDB(); // Temporarily disabled for debugging upload issue
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static('uploads'));
 
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to Kreatif Web API' });

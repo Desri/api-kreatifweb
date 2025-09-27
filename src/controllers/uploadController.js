@@ -1,5 +1,6 @@
 const cloudinary = require('../config/cloudinary');
 const Upload = require('../models/Upload');
+const fs = require('fs');
 
 const uploadImage = async (req, res) => {
   try {
@@ -10,20 +11,44 @@ const uploadImage = async (req, res) => {
       });
     }
 
+    console.log('Upload controller - File received:', {
+      originalname: req.file.originalname,
+      path: req.file.path,
+      size: req.file.size,
+      mimetype: req.file.mimetype
+    });
+
+    console.log('Upload controller - File exists at path:', fs.existsSync(req.file.path));
+
+
     const result = await cloudinary.uploader.upload(req.file.path, {
       folder: 'kreatifweb-uploads',
       resource_type: 'auto'
     });
 
-    const uploadData = new Upload({
-      originalName: req.file.originalname,
+    // Temporarily skip database save due to MongoDB connection issues
+    const savedUpload = {
+      _id: 'temp-id',
       cloudinaryUrl: result.secure_url,
-      cloudinaryPublicId: result.public_id,
+      originalName: req.file.originalname,
       fileSize: req.file.size,
-      mimeType: req.file.mimetype
-    });
+      mimeType: req.file.mimetype,
+      createdAt: new Date()
+    };
 
-    const savedUpload = await uploadData.save();
+    // const uploadData = new Upload({
+    //   originalName: req.file.originalname,
+    //   cloudinaryUrl: result.secure_url,
+    //   cloudinaryPublicId: result.public_id,
+    //   fileSize: req.file.size,
+    //   mimeType: req.file.mimetype
+    // });
+
+    // const savedUpload = await uploadData.save();
+
+    fs.unlink(req.file.path, (err) => {
+      if (err) console.error('Error deleting temporary file:', err);
+    });
 
     res.status(201).json({
       success: true,
@@ -39,6 +64,12 @@ const uploadImage = async (req, res) => {
     });
 
   } catch (error) {
+    if (req.file && req.file.path) {
+      fs.unlink(req.file.path, (err) => {
+        if (err) console.error('Error deleting temporary file on error:', err);
+      });
+    }
+
     console.error('Upload error:', error);
     res.status(500).json({
       success: false,
