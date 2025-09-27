@@ -11,14 +11,6 @@ const uploadImage = async (req, res) => {
       });
     }
 
-    console.log('Upload controller - File received:', {
-      originalname: req.file.originalname,
-      path: req.file.path,
-      size: req.file.size,
-      mimetype: req.file.mimetype
-    });
-
-    console.log('Upload controller - File exists at path:', fs.existsSync(req.file.path));
 
 
     const result = await cloudinary.uploader.upload(req.file.path, {
@@ -26,25 +18,15 @@ const uploadImage = async (req, res) => {
       resource_type: 'auto'
     });
 
-    // Temporarily skip database save due to MongoDB connection issues
-    const savedUpload = {
-      _id: 'temp-id',
-      cloudinaryUrl: result.secure_url,
+    const uploadData = new Upload({
       originalName: req.file.originalname,
+      cloudinaryUrl: result.secure_url,
+      cloudinaryPublicId: result.public_id,
       fileSize: req.file.size,
-      mimeType: req.file.mimetype,
-      createdAt: new Date()
-    };
+      mimeType: req.file.mimetype
+    });
 
-    // const uploadData = new Upload({
-    //   originalName: req.file.originalname,
-    //   cloudinaryUrl: result.secure_url,
-    //   cloudinaryPublicId: result.public_id,
-    //   fileSize: req.file.size,
-    //   mimeType: req.file.mimetype
-    // });
-
-    // const savedUpload = await uploadData.save();
+    const savedUpload = await uploadData.save();
 
     fs.unlink(req.file.path, (err) => {
       if (err) console.error('Error deleting temporary file:', err);
