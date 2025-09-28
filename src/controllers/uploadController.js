@@ -2,6 +2,13 @@ const cloudinary = require('../config/cloudinary');
 const Upload = require('../models/Upload');
 const fs = require('fs');
 
+// Check if Cloudinary is properly configured
+const isCloudinaryConfigured = () => {
+  return process.env.CLOUDINARY_CLOUD_NAME &&
+         process.env.CLOUDINARY_API_KEY &&
+         process.env.CLOUDINARY_API_SECRET;
+};
+
 const uploadImage = async (req, res) => {
   try {
     if (!req.file) {
@@ -11,7 +18,20 @@ const uploadImage = async (req, res) => {
       });
     }
 
+    // Check if Cloudinary is configured
+    if (!isCloudinaryConfigured()) {
+      // Clean up the uploaded file
+      if (req.file && req.file.path) {
+        fs.unlink(req.file.path, (err) => {
+          if (err) console.error('Error deleting temporary file:', err);
+        });
+      }
 
+      return res.status(500).json({
+        success: false,
+        message: 'Upload service is not configured properly. Please contact the administrator.'
+      });
+    }
 
     const result = await cloudinary.uploader.upload(req.file.path, {
       folder: 'kreatifweb-uploads',
