@@ -6,7 +6,8 @@
       "Bash(npm install:*)",
       "Bash(npm run dev:*)",
       "Bash(curl -X POST http://localhost:5000/api/upload -F \"image=@package.json\" -H \"Content-Type: multipart/form-data\")",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(npm start)"
     ],
     "deny": [],
     "ask": []
