@@ -18,10 +18,21 @@ const corsOptions = {
           process.env.FRONTEND_URL,
           process.env.ADMIN_URL
         ].filter(Boolean)
-      : ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3000'];
+      : [
+          'http://localhost:3000',
+          'http://localhost:3001',
+          'http://127.0.0.1:3000',
+          'http://127.0.0.1:3001',
+          'http://localhost:5000',
+          'http://127.0.0.1:5000',
+          'https://admin-kreatifweb.vercel.app' // Add this for testing from production URL locally
+        ];
 
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
+
+    console.log('Checking origin:', origin);
+    console.log('Allowed origins:', allowedOrigins);
 
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
@@ -32,7 +43,8 @@ const corsOptions = {
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
 app.use(cors(corsOptions));
