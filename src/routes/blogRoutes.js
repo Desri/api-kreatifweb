@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const upload = require('../middlewares/multer');
 const {
   getAllBlogs,
   getBlogById,
@@ -10,7 +11,7 @@ const {
 
 router.route('/')
   .get(getAllBlogs)
-  .post(createBlog);
+  .post(upload.single('image'), createBlog);
 
 router.route('/:id')
   .get(getBlogById)

@@ -1,4 +1,6 @@
 const Blog = require('../models/Blog');
+const cloudinary = require('../config/cloudinary');
+const fs = require('fs');
 
 exports.getAllBlogs = async (req, res) => {
   try {
@@ -41,12 +43,44 @@ exports.getBlogById = async (req, res) => {
 
 exports.createBlog = async (req, res) => {
   try {
-    const blog = await Blog.create(req.body);
+    const blogData = {
+      title: req.body.title,
+      content: req.body.content,
+      metaDescription: req.body.metaDescription,
+      category: req.body.category,
+      author: req.body.author,
+      tags: req.body.tags,
+      published: req.body.published
+    };
+
+    // Handle image upload if file is provided
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'kreatifweb-blogs',
+        resource_type: 'auto'
+      });
+
+      blogData.image = result.secure_url;
+
+      // Delete temporary file
+      fs.unlink(req.file.path, (err) => {
+        if (err) console.error('Error deleting temporary file:', err);
+      });
+    }
+
+    const blog = await Blog.create(blogData);
     res.status(201).json({
       success: true,
       data: blog
     });
   } catch (error) {
+    // Clean up file if upload fails
+    if (req.file && req.file.path) {
+      fs.unlink(req.file.path, (err) => {
+        if (err) console.error('Error deleting temporary file:', err);
+      });
+    }
+
     res.status(400).json({
       success: false,
       message: error.message
