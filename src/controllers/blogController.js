@@ -90,9 +90,34 @@ exports.createBlog = async (req, res) => {
 
 exports.updateBlog = async (req, res) => {
   try {
+    const updateData = {};
+
+    if (req.body.title) updateData.title = req.body.title;
+    if (req.body.content) updateData.content = req.body.content;
+    if (req.body.metaDescription) updateData.metaDescription = req.body.metaDescription;
+    if (req.body.category) updateData.category = req.body.category;
+    if (req.body.author) updateData.author = req.body.author;
+    if (req.body.tags) updateData.tags = req.body.tags;
+    if (req.body.published !== undefined) updateData.published = req.body.published;
+
+    // Handle image upload if file is provided
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'kreatifweb-blogs',
+        resource_type: 'auto'
+      });
+
+      updateData.image = result.secure_url;
+
+      // Delete temporary file
+      fs.unlink(req.file.path, (err) => {
+        if (err) console.error('Error deleting temporary file:', err);
+      });
+    }
+
     const blog = await Blog.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       {
         new: true,
         runValidators: true
@@ -111,6 +136,13 @@ exports.updateBlog = async (req, res) => {
       data: blog
     });
   } catch (error) {
+    // Clean up file if upload fails
+    if (req.file && req.file.path) {
+      fs.unlink(req.file.path, (err) => {
+        if (err) console.error('Error deleting temporary file:', err);
+      });
+    }
+
     res.status(400).json({
       success: false,
       message: error.message

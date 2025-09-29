@@ -15,7 +15,7 @@ router.route('/')
 
 router.route('/:id')
   .get(getBlogById)
-  .put(updateBlog)
+  .put(upload.single('image'), updateBlog)
   .delete(deleteBlog);
 
 module.exports = router;
