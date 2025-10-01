@@ -15,7 +15,7 @@ const corsOptions = {
       ? [
           'https://admin-kreatifweb.vercel.app',
           'https://kreatifweb.vercel.app',
-          'https://kreatifweb.id/',
+          'https://kreatifweb.id',
           process.env.FRONTEND_URL,
           process.env.ADMIN_URL
         ].filter(Boolean)
@@ -26,6 +26,7 @@ const corsOptions = {
           'http://127.0.0.1:3001',
           'http://localhost:5000',
           'http://127.0.0.1:5000',
+          'https://kreatifweb.id',
           'https://admin-kreatifweb.vercel.app' // Add this for testing from production URL locally
         ];
 
