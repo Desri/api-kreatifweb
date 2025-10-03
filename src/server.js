@@ -11,26 +11,20 @@ connectDB();
 
 const corsOptions = {
   origin: function (origin, callback) {
-    const allowedOrigins = process.env.NODE_ENV === 'production'
-      ? [
-          'https://admin-kreatifweb.vercel.app',
-          'https://kreatifweb.vercel.app',
-          'https://kreatifweb.id',
-          'https://www.kreatifweb.id',
-          process.env.FRONTEND_URL,
-          process.env.ADMIN_URL
-        ].filter(Boolean)
-      : [
-          'http://localhost:3000',
-          'http://localhost:3001',
-          'http://127.0.0.1:3000',
-          'http://127.0.0.1:3001',
-          'http://localhost:5000',
-          'http://127.0.0.1:5000',
-          'https://kreatifweb.id',
-          'https://www.kreatifweb.id',
-          'https://admin-kreatifweb.vercel.app' // Add this for testing from production URL locally
-        ];
+    const allowedOrigins = [
+      'https://admin-kreatifweb.vercel.app',
+      'https://kreatifweb.vercel.app',
+      'https://kreatifweb.id',
+      'https://www.kreatifweb.id',
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'http://127.0.0.1:3000',
+      'http://127.0.0.1:3001',
+      'http://localhost:5000',
+      'http://127.0.0.1:5000',
+      process.env.FRONTEND_URL,
+      process.env.ADMIN_URL
+    ].filter(Boolean);
 
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
