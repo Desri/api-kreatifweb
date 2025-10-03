@@ -8,7 +8,9 @@
       "Bash(curl -X POST http://localhost:5000/api/upload -F \"image=@package.json\" -H \"Content-Type: multipart/form-data\")",
       "Bash(curl:*)",
       "Bash(npm start)",
-      "WebFetch(domain:api-kreatifweb.vercel.app)"
+      "WebFetch(domain:api-kreatifweb.vercel.app)",
+      "Read(//c/Users/DERY/Documents/startup/kreatifweb/**)",
+      "Read(//c/Users/DERY/Documents/startup/kreatifweb/src/app/contact-us/**)"
     ],
     "deny": [],
     "ask": []
