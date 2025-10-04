@@ -16,6 +16,7 @@ const corsOptions = {
       'https://kreatifweb.vercel.app',
       'https://kreatifweb.id',
       'https://www.kreatifweb.id',
+      'http://www.kreatifweb.id',
       'http://localhost:3000',
       'http://localhost:3001',
       'http://127.0.0.1:3000',

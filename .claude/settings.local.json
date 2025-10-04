@@ -10,7 +10,10 @@
       "Bash(npm start)",
       "WebFetch(domain:api-kreatifweb.vercel.app)",
       "Read(//c/Users/DERY/Documents/startup/kreatifweb/**)",
-      "Read(//c/Users/DERY/Documents/startup/kreatifweb/src/app/contact-us/**)"
+      "Read(//c/Users/DERY/Documents/startup/kreatifweb/src/app/contact-us/**)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
