@@ -83,5 +83,6 @@ app.use('/api/users', require('../src/routes/userRoutes'));
 app.use('/api/blogs', require('../src/routes/blogRoutes'));
 app.use('/api/categories', require('../src/routes/categoryRoutes'));
 app.use('/api/upload', require('../src/routes/uploadRoutes'));
+app.use('/api/contacts', require('../src/routes/contactRoutes'));
 
 module.exports = app;
