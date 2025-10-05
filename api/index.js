@@ -16,6 +16,8 @@ const corsOptions = {
       ? [
           'https://admin-kreatifweb.vercel.app',
           'https://kreatifweb.vercel.app',
+          'https://kreatifweb.id',
+          'https://www.kreatifweb.id',
           process.env.FRONTEND_URL,
           process.env.ADMIN_URL
         ].filter(Boolean)
