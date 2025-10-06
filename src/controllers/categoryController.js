@@ -1,12 +1,25 @@
 const Category = require('../models/Category');
+const Blog = require('../models/Blog');
 
 exports.getAllCategories = async (req, res) => {
   try {
     const categories = await Category.find();
+
+    // Add article count for each category
+    const categoriesWithCount = await Promise.all(
+      categories.map(async (category) => {
+        const articleCount = await Blog.countDocuments({ category: category._id });
+        return {
+          ...category.toObject(),
+          articleCount
+        };
+      })
+    );
+
     res.json({
       success: true,
-      count: categories.length,
-      data: categories
+      count: categoriesWithCount.length,
+      data: categoriesWithCount
     });
   } catch (error) {
     res.status(500).json({

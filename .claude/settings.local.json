@@ -13,7 +13,9 @@
       "Read(//c/Users/DERY/Documents/startup/kreatifweb/src/app/contact-us/**)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Read(//c/Users/DERY/Documents/startup/admin-kreatifweb/src/components/Blog/**)",
+      "Read(//c/Users/DERY/Documents/startup/admin-kreatifweb/**)"
     ],
     "deny": [],
     "ask": []
