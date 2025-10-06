@@ -4,7 +4,7 @@ const fs = require('fs');
 
 exports.getAllBlogs = async (req, res) => {
   try {
-    const blogs = await Blog.find().populate('category');
+    const blogs = await Blog.find().populate('category').sort({ createdAt: -1 });
     res.json({
       success: true,
       count: blogs.length,
