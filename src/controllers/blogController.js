@@ -45,6 +45,7 @@ exports.createBlog = async (req, res) => {
   try {
     const blogData = {
       title: req.body.title,
+      slug: req.body.slug, // Optional - will be auto-generated from title if not provided
       content: req.body.content,
       metaDescription: req.body.metaDescription,
       category: req.body.category,

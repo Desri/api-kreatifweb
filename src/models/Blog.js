@@ -6,6 +6,12 @@ const blogSchema = new mongoose.Schema({
     required: [true, 'Title is required'],
     trim: true
   },
+  slug: {
+    type: String,
+    unique: true,
+    trim: true,
+    lowercase: true
+  },
   content: {
     type: String,
     required: [true, 'Content is required']
@@ -42,6 +48,17 @@ const blogSchema = new mongoose.Schema({
   }
 }, {
   timestamps: true
+});
+
+// Pre-save hook to generate slug from title
+blogSchema.pre('save', function(next) {
+  if (this.isModified('title') || !this.slug) {
+    this.slug = this.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+  next();
 });
 
 module.exports = mongoose.model('Blog', blogSchema);
