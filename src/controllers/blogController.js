@@ -20,7 +20,17 @@ exports.getAllBlogs = async (req, res) => {
 
 exports.getBlogById = async (req, res) => {
   try {
-    const blog = await Blog.findById(req.params.id).populate('category');
+    const { id } = req.params;
+    let blog;
+
+    // Check if the id is a valid MongoDB ObjectId
+    if (id.match(/^[0-9a-fA-F]{24}$/)) {
+      // If valid ObjectId, search by _id
+      blog = await Blog.findById(id).populate('category');
+    } else {
+      // Otherwise, search by slug
+      blog = await Blog.findOne({ slug: id }).populate('category');
+    }
 
     if (!blog) {
       return res.status(404).json({
