@@ -6,7 +6,8 @@ const {
   getBlogById,
   createBlog,
   updateBlog,
-  deleteBlog
+  deleteBlog,
+  incrementReadCount
 } = require('../controllers/blogController');
 
 router.route('/')
@@ -17,5 +18,8 @@ router.route('/:id')
   .get(getBlogById)
   .put(upload.single('image'), updateBlog)
   .delete(deleteBlog);
+
+router.route('/:id/read')
+  .post(incrementReadCount);
 
 module.exports = router;

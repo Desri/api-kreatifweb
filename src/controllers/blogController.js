@@ -183,3 +183,46 @@ exports.deleteBlog = async (req, res) => {
     });
   }
 };
+
+exports.incrementReadCount = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let blog;
+
+    // Check if the id is a valid MongoDB ObjectId
+    if (id.match(/^[0-9a-fA-F]{24}$/)) {
+      // If valid ObjectId, search by _id
+      blog = await Blog.findByIdAndUpdate(
+        id,
+        { $inc: { readCount: 1 } },
+        { new: true }
+      ).populate('category');
+    } else {
+      // Otherwise, search by slug
+      blog = await Blog.findOneAndUpdate(
+        { slug: id },
+        { $inc: { readCount: 1 } },
+        { new: true }
+      ).populate('category');
+    }
+
+    if (!blog) {
+      return res.status(404).json({
+        success: false,
+        message: 'Blog not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: {
+        readCount: blog.readCount
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};

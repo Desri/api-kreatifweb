@@ -45,6 +45,11 @@ const blogSchema = new mongoose.Schema({
   isActive: {
     type: Boolean,
     default: true
+  },
+  readCount: {
+    type: Number,
+    default: 0,
+    min: 0
   }
 }, {
   timestamps: true
