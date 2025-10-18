@@ -226,3 +226,88 @@ exports.incrementReadCount = async (req, res) => {
     });
   }
 };
+
+exports.publishBlog = async (req, res) => {
+  try {
+    const blog = await Blog.findByIdAndUpdate(
+      req.params.id,
+      { published: true },
+      { new: true }
+    ).populate('category');
+
+    if (!blog) {
+      return res.status(404).json({
+        success: false,
+        message: 'Blog not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Blog published successfully',
+      data: blog
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+exports.unpublishBlog = async (req, res) => {
+  try {
+    const blog = await Blog.findByIdAndUpdate(
+      req.params.id,
+      { published: false },
+      { new: true }
+    ).populate('category');
+
+    if (!blog) {
+      return res.status(404).json({
+        success: false,
+        message: 'Blog not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Blog unpublished successfully',
+      data: blog
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+exports.togglePublishBlog = async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+
+    if (!blog) {
+      return res.status(404).json({
+        success: false,
+        message: 'Blog not found'
+      });
+    }
+
+    blog.published = !blog.published;
+    await blog.save();
+
+    const updatedBlog = await Blog.findById(req.params.id).populate('category');
+
+    res.json({
+      success: true,
+      message: `Blog ${blog.published ? 'published' : 'unpublished'} successfully`,
+      data: updatedBlog
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};

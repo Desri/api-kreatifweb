@@ -7,7 +7,10 @@ const {
   createBlog,
   updateBlog,
   deleteBlog,
-  incrementReadCount
+  incrementReadCount,
+  publishBlog,
+  unpublishBlog,
+  togglePublishBlog
 } = require('../controllers/blogController');
 
 router.route('/')
@@ -21,5 +24,14 @@ router.route('/:id')
 
 router.route('/:id/read')
   .post(incrementReadCount);
+
+router.route('/:id/publish')
+  .post(publishBlog);
+
+router.route('/:id/unpublish')
+  .post(unpublishBlog);
+
+router.route('/:id/toggle-publish')
+  .post(togglePublishBlog);
 
 module.exports = router;
