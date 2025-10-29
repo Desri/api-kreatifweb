@@ -55,6 +55,7 @@ const uploadImage = async (req, res) => {
     res.status(201).json({
       success: true,
       message: 'Image uploaded successfully',
+      url: savedUpload.cloudinaryUrl, // Add url at top level for frontend compatibility
       data: {
         id: savedUpload._id,
         url: savedUpload.cloudinaryUrl,
